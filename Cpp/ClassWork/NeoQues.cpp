@@ -2108,4 +2108,443 @@ int main() {
     return 0;
 }
 
+/*
+--------------------------Lecture 12----------------------
+*/
+
+#include <iostream>
+using namespace std;
+struct Node {
+    int data;
+    Node* next;
+};
+
+Node* createNode(int newData) {
+    Node* newNode = new Node;
+    newNode->data = newData;
+    newNode->next = nullptr;
+    return newNode;
+}
+
+void insert(Node* header, int newData) {
+    Node* newNode = createNode(newData);
+    if(header -> next == nullptr){
+        header -> next = newNode;
+        // newNode -> next = header;
+    }else{
+        Node* current = header -> next;
+        while(current -> next != header){
+            current = current -> next;
+        }
+        current -> next = newNode;
+    }
+    newNode -> next = header;
+    header -> data += 1;
+    // return header;
+    
+}
+
+void printAlternateNodes(Node* header) {
+    if(header -> next == nullptr){
+        cout<<"Linked List is empty"<<endl;
+    }else{
+        cout<<"Alternate Nodes: ";
+        Node* current = header->next;
+        // do{
+        //     cout<<current -> data <<" ";
+        //     current = current -> next -> next;
+        // }while(current -> next != header );
+        while(current -> next != header ){
+            cout<<current -> data <<" ";
+            current = current -> next -> next;
+            if(current -> next == header)
+            cout<<current -> data <<" "<<endl;
+        }
+    }
+    
+}
+
+void deleteList(Node*& header) {
+    if (header->next == nullptr) {
+        delete header;
+        header = nullptr;
+        return;
+    }
+
+    Node* current = header->next;
+    Node* nextNode;
+
+    while (current != header) {
+        nextNode = current->next;
+        delete current;
+        current = nextNode;
+    }
+
+    delete header;
+    header = nullptr;
+}
+
+int main() {
+    Node* header = new Node;
+    header->next = nullptr;
+
+    int listSize;
+    std::cin >> listSize;
+
+    for (int i = 0; i < listSize; i++) {
+        int newData;
+        cin >> newData;
+
+        // Insert node
+        insert(header, newData);
+    }
+
+    printAlternateNodes(header);
+
+    deleteList(header);
+
+    return 0;
+}
+
+/* Question 2*/
+#include <iostream>
+#include <string>
+using namespace std;
+struct Message {
+    string content;
+    Message* next;
+};
+
+Message* createMessageNode(const string& content) {
+    Message* newMessage = new Message();
+    newMessage->content = content;
+    newMessage->next = nullptr;
+    return newMessage;
+}
+
+Message* insertMessage(Message* head, string content) {
+    Message* newMessage = createMessageNode(content);
+
+    if (head -> next == nullptr) {
+        head->next = newMessage;
+        newMessage->next = head;
+    } else {
+        Message* current = new Message();
+        current = head -> next;
+        while(current -> next != head){
+            current = current -> next;
+        }
+        current -> next = newMessage;
+        newMessage -> next = head;
+    }
+
+    return head;
+}
+
+Message* reverseInsertedMessages(Message* head) {
+    if(head == nullptr){
+        return head;
+    }else{
+        Message* prev = head;
+        Message* temp = head;
+        Message* current = head -> next;
+        
+        prev -> next = prev;
+        while(current != head){
+            temp = current -> next;
+            current -> next = prev;
+            head -> next = current;
+            prev = current;
+            current = temp;
+        }
+        head = prev;
+    }
+}
+
+void displayMessages(Message* head) {
+    if (head == nullptr) {
+        cout << "Message queue is empty!" << endl;
+        return;
+    }
+
+    Message* temp = head;
+    cout << "Message Queue: " << endl;
+    do {
+        cout << "- " << temp->content << endl;
+        temp = temp->next;
+    } while (temp -> next != head);
+    cout << endl;
+}
+
+int main() {
+    Message* head = new Message();
+    head -> next = nullptr;
+    int numMessages;
+
+    cin >> numMessages;
+
+    cin.ignore();
+
+    for (int i = 0; i < numMessages; i++) {
+        string content;
+        getline(cin, content);
+        head = insertMessage(head, content);
+    }
+
+
+    head = reverseInsertedMessages(head);
+    displayMessages(head);
+
+    return 0;
+}
+
+/* ------------------Lecture 13--------------------
+Question 1*/
+#include <iostream>
+#include <string>
+
+struct Node {
+    std::string data;
+    Node* prev;
+    Node* next;
+};
+
+void insertAtBeginning(Node** head, const std::string& newData) {
+    Node* newNode = new Node;
+    newNode -> data = newData;
+    newNode -> prev = nullptr;
+    newNode -> next = *head;
+
+    if (*head != nullptr)
+        (*head)->prev = newNode;
+
+    *head = newNode;
+}
+
+int countUniqueInteractions(Node* head) {
+    Node* key = head;
+    int count = 0;
+    while(key != nullptr){
+        count++;
+        Node* match = key -> next;
+        while(match  != nullptr){
+            if(key -> data == match -> data){
+                count--;
+            }
+            match = match -> next;
+        }
+        key = key -> next;
+    }
+    return count;
+}
+
+int main() {
+    Node* head = nullptr;
+    int n;
+    std::string data;
+
+    std::cin >> n;
+
+    // Create the doubly linked list
+    for (int i = 0; i < n; i++) {
+        std::cin >> data;
+        insertAtBeginning(&head, data);
+    }
+
+    int uniqueInteractions = countUniqueInteractions(head);
+
+    std::cout << "Number of unique user interactions: " << uniqueInteractions << std::endl;
+
+    return 0;
+}
+/* ------------------Lecture 13--------------------
+Question 2*/
+
+#include<iostream>
+using namespace std;
+
+struct Node
+{
+	char data;
+	Node* next;
+	Node* pre;
+};
+
+Node* createNode(char value){
+    Node* newNode = new Node();
+    newNode-> data = value;
+    newNode -> next = nullptr;
+    newNode -> pre = nullptr;
+    return newNode;
+}
+
+Node* insertAtTail(Node* head, char data)
+{
+    Node* newNode = createNode(data);
+    
+    if(head == nullptr ){
+        head = newNode;
+        return head;
+    }else{
+        Node* current = head;
+        while(current -> next != nullptr){
+            current = current -> next;
+        }
+        current -> next = newNode;
+        newNode -> pre = current;
+        return head;
+    }
+}
+
+void rotateByN(Node* &head, int pos){  
+    if (!head || pos <= 0){
+        return;  // Check if head is null or invalid position    
+    }
+Node* current = head;    
+Node* newHead = nullptr;    
+int count = 1;    // Traverse the list to the (pos)th node    
+while (count < pos && current->next != nullptr) {
+    current = current->next;        
+    count++;    
+    
+}    
+if (current->next == nullptr)
+return;  // If pos is greater than the length of the list   
+// Now current is at the (pos)th node    
+newHead = current->next;   
+newHead->pre = nullptr;    
+current->next = nullptr;    // Find the last node    
+Node* temp = newHead;   
+while (temp->next != nullptr) { 
+    temp = temp->next;    
+    
+}        // Connect last node with original head  
+temp->next = head;    
+head->pre = temp;    // Update head    
+head = newHead;
+    
+}
+
+void display(Node* head)
+{
+    Node* current = head;
+    while(current != nullptr){
+        cout<<current->data<<" ";
+        current = current -> next;
+    }cout<<endl;
+}
+
+// void rotateByN(Node* head, int pos)
+// {
+//     Node* temp = head;
+//     while(pos > 2){
+//         temp = temp -> next;
+//         pos--;
+//     }
+//     Node* lastTemp = temp -> next;
+//     while(lastTemp -> next != nullptr){
+//         lastTemp = lastTemp -> next;
+//     }
+//     lastTemp -> next = head;
+//     head -> pre = lastTemp;
+//     temp -> next -> pre = nullptr;
+//     temp -> next = nullptr;
+//     head = temp -> next;
+// }
+
+int main()
+{
+// 	Node* head = new Node();
+// 	head -> next = nullptr;
+// 	head -> pre = nullptr;
+    Node* head = nullptr;
+	int n;
+	char data;
+	cin>>n;
+    cin.ignore(); // Ignore the newline character
+
+    for (int i = 0; i < n; i++) {
+        cin>>data;
+        head = insertAtTail(head, data);
+    }
+	int k;
+	cin>>k;
+	rotateByN(head, k);
+	display(head);
+	return 0;
+}
+/* ------------------Lecture 13--------------------
+Question 3*/
+
+#include <iostream>
+using namespace std;
+struct Node {
+    int data;
+    Node* prev;
+    Node* next;
+};
+
+void insertAtBeginning(Node** head, int newData) {
+    Node* newNode = new Node;
+    newNode->data = newData;
+    newNode->prev = nullptr;
+    newNode->next = *head;
+
+    if (*head != nullptr)
+        (*head)->prev = newNode;
+
+    *head = newNode;
+}
+
+Node* reverseList(Node* head) {
+    Node* lastNode = head;
+    if(head == nullptr || head -> next == nullptr){
+        return head;
+        // head = nullptr;
+    }
+    
+    Node* prev = nullptr;
+    Node* curr = head;
+    while(curr != nullptr){
+        prev = curr -> prev;
+        curr -> prev = curr -> next;
+        curr -> next = prev;
+        
+        curr = curr -> prev;
+    }
+    return prev -> prev;
+}
+
+void printList(Node* head) {
+    Node* current = head;
+    while (current != nullptr) {
+        std::cout << current->data << " ";
+        current = current->next;
+    }
+    std::cout << std::endl;
+}
+
+int main() {
+    Node* head = nullptr;
+    int n, data;
+
+    cin >> n;
+
+    // Create the doubly linked list
+    for (int i = 0; i < n; i++) {
+        std::cin >> data;
+        insertAtBeginning(&head, data);
+    }
+
+    std::cout << "Original List: ";
+    printList(head);
+
+    // Reverse the list
+    head = reverseList(head);
+
+    cout << "Reversed List: ";
+    printList(head);
+
+    return 0;
+}
 // hare and tortois algorithm
