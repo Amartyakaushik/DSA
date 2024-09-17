@@ -2547,4 +2547,272 @@ int main() {
 
     return 0;
 }
+
+/*
+---------------------------Lecture 15------------------
+######################           Q1         
+
+*/
+#include<iostream>
+using namespace std;
+#define MAX 10
+struct Stack{
+    int top;
+    int arr[MAX];
+};
+
+void initStack(Stack* s){
+    s -> top = -1;
+}
+
+
+void isFull(Stack* s){
+    if(s -> top == MAX -1){
+        cout<<"Stack is full!"<<endl;
+        // return true;
+    }else{
+        cout<<"Stack is not full"<<endl;
+        // return false;
+    }
+}
+
+void isEmpty(Stack* s){
+    if(s -> top == -1){
+        cout<<"Stack is empty!"<<endl;
+        // return true;
+    }else{
+        cout<<"Stack is not empty"<<endl;
+        // return false;
+    }
+        // return true;
+        // return false;
+}
+
+void push(Stack* s, int value){
+    // if(isFull(s)){
+    if(s -> top == MAX -1){
+        cout<<"Stack is full!"<<endl;
+        return;
+    }else{
+        int index = ++(s -> top);
+        s -> arr[index] = value;
+    }
+    }
+
+void pop(Stack* s){
+    // if(isEmpty(s)){
+    if(s -> top == -1){
+        cout<<"Stack is empty!"<<endl;
+        return;
+    }else{
+        (s -> top)--;
+    }
+}
+
+int main(){
+    int num;
+    Stack* s = new Stack();
+    initStack(s);
+    while(true){
+        cin>>num;
+        
+    switch(num){
+        case 1:
+            int val;
+            cin>>val;
+            push(s,val);
+            break;
+        case 2:
+            pop(s);
+            // cin>>num;
+            break;
+        case 3:
+            isFull(s);
+            // cin>>num;
+            break;
+        case 4:
+            isEmpty(s);
+            // cin>>num;
+            break;
+        case 5:
+            delete s;
+            return 0;
+            break;
+        default:
+            cout<<"Invalid choice"<<endl;
+            break;
+    }
+    }
+}
+
+// ###################             Q2
+#include<iostream>
+#include<iomanip>
+using namespace std;
+#define MAX 10
+struct Stack{
+    int top;
+    int arr[MAX];
+};
+
+Stack* initStack(Stack* s){
+    s -> top = -1;
+}
+
+void push(Stack* s, int value){
+    if(s -> top == MAX -1){
+        return;
+    }else{
+        int index = ++s -> top;
+        s -> arr[index] = value;
+    }
+}
+
+void pop(Stack* s){
+    if(s -> top == -1){
+        return;
+    }else{
+        cout<<"Popped Value: "<< s-> arr[s -> top]<<endl;
+        s -> top--;
+    }
+}
+
+float average(Stack* s){
+    Stack* temp = s;
+    int index = s -> top;
+    float count= (float)(index +1);
+    float sum = 0.0;
+    while(index != -1){
+        sum += temp -> arr[index];
+        index--;
+    }
+    return (sum / count);
+    
+}
+
+void display(Stack* s){
+    Stack* temp = s;
+    int index = s -> top ;
+    cout<<"Initial Stack: ";
+    while(index != -1){
+        cout<<temp -> arr[index]<<" ";
+        index--;
+    }cout<<endl;
+    
+}
+int main(){
+    Stack* s = new Stack();
+    initStack(s);
+    int n;
+    cin>>n;
+    for(int i = 0; i < n; i++){
+        int data;
+        cin>>data;
+        push(s,data);
+    }
+    display(s);
+    float avg = average(s);
+    cout<<"Average: "<<fixed<<setprecision(2)<<avg<<endl;
+    pop(s);
+    float avg2 = average(s);
+    cout<<"Updated Average: "<<fixed<<setprecision(2)<<avg2<<endl;
+    // cout<<"Average: "<<avg<<endl;
+    
+}
+
+// ##################                Q3
+#include<iostream>
+using namespace std;
+// #define MAX 10
+
+struct Node{
+    int data;
+    Node* next;
+};
+struct Stack{
+    Node* top;
+};
+
+Stack* createStack(Stack* s){
+    s -> top = nullptr;
+    return s;
+}
+
+Node* createNode(int val){
+    Node* newNode = new Node();
+    newNode -> data = val;
+    newNode -> next = nullptr;
+    return newNode;
+}
+
+void push(Stack* s, int val){
+    Node* newNode = createNode(val);
+    if(s -> top == nullptr){
+        s -> top = newNode;
+    }else{
+        newNode -> next = s -> top;
+        s -> top = newNode;
+    }
+}
+
+void display(Stack* s){
+    Node* temp = s -> top;
+    while(temp != nullptr){
+        cout<<temp -> data<<" ";
+        temp = temp -> next;
+    }cout<<endl;
+}
+
+// void removeEven(Stack* s){
+//     Node* temp = s -> top;
+//     while (s->top != nullptr && s->top->data % 2 == 0) {        
+//         Node* toDelete = s->top;      
+//           s->top = s->top->next;        
+//           delete toDelete;    
+//     }
+//     while(temp != nullptr){
+//         if(temp -> next -> data % 2 == 0){
+//             Node* del = temp -> next;
+//             temp -> next = temp -> next -> next;
+//             delete del;
+//         }
+//             temp = temp -> next;
+//         // }
+//     }
+// }
+void removeEven(Stack* s){   
+       while (s->top != nullptr && s->top->data % 2 == 0) { 
+                  Node* toDelete = s->top;       
+                   s->top = s->top->next;        
+                   delete toDelete;    
+       }
+       
+       Node* temp = s->top;    
+       while(temp != nullptr && temp->next != nullptr){       
+            if(temp->next->data % 2 == 0){
+                Node* toDelete = temp->next;            
+                temp->next = temp->next->next;            
+                delete toDelete;        
+            } else {           
+                 temp = temp->next;        
+            }    
+           
+       }
+    
+}
+
+int main(){
+    int n;
+    cin>>n;
+    Stack* s = new Stack(); 
+    createStack(s);
+    for(int i = 0; i < n; i++){
+        int num;
+        cin>>num;
+        push(s,num);
+    }
+    display(s);
+    removeEven(s);
+    display(s);
+}
 // hare and tortois algorithm
