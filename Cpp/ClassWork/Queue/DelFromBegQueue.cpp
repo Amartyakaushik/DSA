@@ -17,8 +17,20 @@ int isFull(Queue* queue){
     return (queue->rear == MAX -1);
 }
 int isEmpty(Queue* queue){
-    return (queue->rear == -1 );
-    // return (queue.rear == -1 || queue.front == -1);
+    // return (queue->rear == -1 );
+    return (queue->front > queue->rear || queue->front == -1);
+}
+
+Queue* Dequeue(Queue* queue){
+    if(isEmpty(queue)){
+        return NULL;
+    }else{
+        if(queue->front == queue->rear){
+            queue->front = queue->rear = -1;
+        }
+        queue->front++;
+        return queue;
+    }
 }
 
 Queue* Enqueue(Queue* queue, int data){
@@ -53,6 +65,21 @@ int main(){
     queue = Enqueue(queue,23);
     queue = Enqueue(queue,234);
     queue = Enqueue(queue,235);
+    queue = Enqueue(queue,2356);
+    queue = Enqueue(queue,23567);
+    printQueue(queue);
+
+    queue = Dequeue(queue);
+    printQueue(queue);
+    queue = Dequeue(queue);
+    printQueue(queue);
+    queue = Dequeue(queue);
+    printQueue(queue);
+    queue = Dequeue(queue);
+    printQueue(queue);
+    queue = Dequeue(queue);
+    printQueue(queue);
+    queue = Dequeue(queue);
     printQueue(queue);
 
 }
