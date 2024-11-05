@@ -24,6 +24,32 @@ void insert(int value){
     return ;
 }
 
+int delete( ){
+    if(heapSize <= 0){
+        cout<<"Heap is empty"<<endl;
+        return -1;
+    }
+
+    int heap[0] = heap[heapSize - 1];
+    heapSize--;
+    int current = 0;
+    while(current * 2 + 1 < heapSize){
+        int max = current * 2 + 1;
+        int right = current * 2 + 2;
+        if(right < heapSize && heap[right] > heap[max]){
+            max = right;
+            }
+        if(heap[current] >= heap[max]){
+            break;
+        }
+            int temp = heap[current];
+            heap[current] = heap[max];
+            heap[max] = temp;
+            current = max;
+    }
+        return max;
+}
+
 void display(){
     for(int i = 0; i < heapSize; i++){
         cout<<heap[i]<<" ";
@@ -38,5 +64,8 @@ int main(){
     insert(77);
     insert(11);
     insert(55);
+    display();
+
+    delete();
     display();
 }
