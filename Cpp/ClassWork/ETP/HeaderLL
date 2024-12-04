@@ -1,0 +1,104 @@
+// HEADER LINKED LIST
+#include<iostream>
+using namespace std;
+
+struct Node{
+    int data;
+    struct Node* next;
+};
+
+Node* createNode(int value){
+    Node* newNode = new Node();
+    newNode -> data = value;
+    newNode -> next = nullptr;
+}
+
+Node* insertAtBeg(Node* header,int value){
+    Node* newNode = createNode(value);
+    newNode -> next = header -> next;
+    header -> next = newNode;
+    header->data += 1;
+    return header;
+}
+Node* insertAtEnd(Node* header,int value){
+    Node* newNode = createNode(value);
+    Node* current = header ;
+
+    while(current -> next != nullptr){
+        current = current -> next;
+    }
+    current -> next = newNode;
+    header->data += 1;
+    return header;
+}
+Node* insertAtPosition(Node* header, int position, int value){
+    Node* newNode = createNode(value);
+    Node* current = header ;
+    for(int i = 1; i<position; i++){
+        // if(current -> next == nullptr){
+        //     break;
+        // }
+        current = current -> next;
+    }
+    newNode -> next = current -> next;
+    current -> next = newNode;
+    header->data += 1;
+    return header;
+}
+Node* deleteAtBeg(Node* header){
+    Node* temp = header -> next;
+    header -> next = temp -> next;
+    delete temp;
+    header->data -= 1;
+    return header;
+}
+Node* deleteAtEnd(Node* header){
+    if(header -> next == nullptr){
+        return nullptr;
+    }
+    Node* second_last = header ;
+    while(second_last -> next -> next != nullptr){
+        second_last = second_last -> next;
+    }
+    Node* delete_ELem = second_last -> next ;
+    second_last -> next = nullptr;
+
+    delete delete_ELem;
+    header->data -= 1;
+    return header;
+}
+Node* deleteAtPositon(Node* header,int position){
+    // Node* temp = header->next ;
+    Node* temp = header;
+
+    while(position > 1){
+        temp = temp -> next;
+        position--;
+    }
+    Node* prev = new Node(); 
+    prev = temp;
+    prev -> next = temp -> next -> next;
+
+    temp = nullptr;
+    delete temp;
+    header->data -= 1;
+    return header;
+}
+void printList(Node* header){
+    Node* temp = header -> next;
+    while(temp -> next != header){
+        cout<<temp -> data<<" ";
+        temp = temp -> next;
+    }cout<<endl;
+}
+
+int main(){
+    Node* header = new Node();
+    header -> data = 0;
+    header -> next = nullptr;
+
+    header = insertAtBeg(header, 200);
+    header = insertAtBeg(header, 220);
+    header = insertAtBeg(header, 222);
+    printList(header);
+}

@@ -1,0 +1,176 @@
+// BINARY TREE
+#include<iostream>
+using namespace std;
+
+struct Node{
+    int data;
+    Node* left;
+    Node* right;
+
+    Node(int val){
+        data = val;
+        left = right = nullptr;
+    }
+};
+
+
+void preOrder(Node* root){
+    if(root == nullptr){
+        return;
+    }
+
+    cout<<root -> data<<" ";
+    preOrder(root-> left);
+    preOrder(root -> right);
+}
+
+
+void inOrder(Node* root){
+    if(root == nullptr){
+        return;
+    }
+    inOrder(root -> left);
+    cout<< root -> data << " ";
+    inOrder(root -> right);
+}
+
+void postOrder(Node* root){
+    if(root == nullptr){
+        return;
+    }
+    postOrder(root -> left);
+    postOrder(root -> right);
+    cout<< root -> data << " ";
+}
+int main(){
+    Node* root = new Node(1);
+    root-> left = new Node(2);
+    root -> right = new Node(3);
+    root -> left -> left = new Node(4);
+    root -> left -> right = new Node(5);
+    root -> right -> left = new Node(6);
+    root -> right -> right = new Node(7);
+
+    preOrder(root);
+    cout<<"Preorder"<<endl;
+    inOrder(root);
+    cout<<"inorder"<<endl;
+    postOrder(root);
+    cout<<"PostOrder"<<endl;
+
+}
+
+// BST 
+#include<iostream>
+using namespace std;
+struct Node{
+    int data;
+    Node* left;
+    Node* right;
+
+    Node(int val){
+        data = val;
+        left = right = nullptr;
+    }
+};
+
+Node* insertInBst(Node* root, int key){
+    if(root == nullptr){
+        return new Node(key);
+    }
+
+    if(root-> data > key){
+       root-> left = insertInBst(root->left, key);
+    }else{
+        root -> right = insertInBst(root -> right , key);
+    }
+
+    return root;
+}
+
+Node* searchInBST(Node* root, int key){
+    if(root->data == key){
+        return root;
+    }
+
+    if(key < root -> data){
+        return searchInBST(root -> left , key);
+    }else if(key > root -> data){
+        return searchInBST(root -> right , key);
+    }else{
+        return nullptr;
+    }
+}
+
+void preOrder(Node* root){
+    if(root == nullptr){
+        return;
+        }
+
+        cout<<root-> data << " ";
+        preOrder(root->left);
+        preOrder(root->right);
+}
+void inOrder(Node* root){
+    if(root == nullptr){
+        return;
+    }
+
+    inOrder(root->left);
+    cout<<root-> data<<" ";
+    inOrder(root->right);
+}
+
+
+Node* inorderSucc(Node* root){
+    Node* curr = root;
+    while(curr != nullptr && curr -> left != nullptr){
+        curr = curr -> left;
+    }
+    return curr;
+}
+Node* DeleteInBST(Node* root, int key){
+    if(root -> data > key){
+        root -> left = DeleteInBST(root-> left , key);
+    }else if(root -> data < key){
+        root -> right = DeleteInBST(root -> right , key);
+    }else{
+        if(root -> left == nullptr){
+            Node* temp = root -> right;
+            delete(root);
+            return temp;
+        }else if(root -> right == nullptr){
+            Node * temp = root -> left;
+            delete(root);
+            return temp;
+        }else{
+            Node* temp = inorderSucc(root -> right);
+            root -> data = temp -> data;
+            root -> right = DeleteInBST(root-> right, temp -> data);
+        }
+    }
+    return root;
+}
+int main(){
+    Node* root = nullptr;
+    root = insertInBst(root, 4);
+    root = insertInBst(root, 2);
+    root = insertInBst(root, 3);
+    root = insertInBst(root, 5);
+    root = insertInBst(root, 1);
+    root = insertInBst(root, 8);
+    root = insertInBst(root, 7);
+
+    inOrder(root);
+    cout<<endl;
+    preOrder(root);
+
+    if(searchInBST(root, 8) != nullptr){
+        cout<<"found!"<<endl;
+    }else{
+        cout<<"not"<<endl;
+    }
+
+    root = DeleteInBST(root, 3);
+    inOrder(root);
+}

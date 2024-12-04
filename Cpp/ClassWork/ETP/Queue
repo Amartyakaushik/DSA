@@ -1,0 +1,398 @@
+//  QUEUE
+#include<iostream>
+using namespace std;
+
+struct Node{
+    int data;
+    Node* next;
+};
+struct Queue{
+    Node* front;
+    Node* rear;
+};
+
+Node* createNode(int value){
+    Node* newNode = new Node();
+    newNode -> data = value;
+    newNode -> next = nullptr;
+    return newNode;
+}
+
+Queue* createQueue(Queue* queue){
+    // Queue* queue = new Queue();
+    queue -> front = nullptr;
+    queue -> rear = nullptr;
+    return queue;
+}
+
+bool isEmpty(Queue* queue){
+    return queue -> front == nullptr;
+}
+
+Queue* Enqueue(Queue* queue, int value){
+    Node* newNode = createNode(value);
+    if(isEmpty(queue)){
+        queue -> front = newNode;
+        queue -> rear = newNode;
+        // return;
+    }else{
+        queue -> rear -> next = newNode;
+        queue -> rear = newNode;
+    }
+    cout<<"Done"<<endl;
+    return queue;
+}
+
+Queue* Dequeue(Queue* queue){
+    if(isEmpty(queue)){
+        cout<<"Queue is already empty!"<<endl;
+    }else{
+        Node* temp = queue -> front;
+        queue -> front = queue -> front -> next;
+        delete temp;
+    }
+    return queue;
+}
+void printQueue(Queue* queue){
+    Node* temp = queue -> front;
+    while(temp != nullptr){
+        cout<<temp -> data<<" ";
+        temp = temp -> next;
+    }cout<<endl;
+}
+int main(){
+    Queue* queue = createQueue(queue);
+    queue = Enqueue(queue, 12);
+    queue = Enqueue(queue, 123);
+    queue = Enqueue(queue, 3442);
+    queue = Enqueue(queue, 8765);
+    printQueue(queue);
+
+    queue = Dequeue(queue);
+    printQueue(queue);
+
+}
+
+
+
+// del from beg 
+#include<iostream>
+using namespace std;
+#define MAX 10
+
+struct Queue{
+    int arr[MAX];
+    int rear;
+    int front;
+};
+
+void initQueue(Queue* queue){
+    queue->rear = -1;
+    queue->front = -1;
+}
+
+int isFull(Queue* queue){
+    return (queue->rear == MAX -1);
+}
+int isEmpty(Queue* queue){
+    // return (queue->rear == -1 );
+    return (queue->front > queue->rear || queue->front == -1);
+}
+
+Queue* Dequeue(Queue* queue){
+    if(isEmpty(queue)){
+        return NULL;
+    }else{
+        if(queue->front == queue->rear){
+            queue->front = queue->rear = -1;
+        }
+        queue->front++;
+        return queue;
+    }
+}
+
+Queue* Enqueue(Queue* queue, int data){
+    // Queue* newData = new Queue();
+    // newData->arr[++rear] = data;
+
+    if(isFull(queue)){
+        cout<<"Queue is full"<<endl;
+        // return;
+    }
+    if(queue->front == -1){
+        queue->front = 0;
+    }
+    queue->arr[++queue->rear] = data;
+    return queue;
+}
+
+void printQueue(Queue* queue){
+    if(isEmpty(queue)){
+        cout<<"Queue is empty"<<endl;
+    }
+    else{
+        for(int i = queue->front; i<=queue->rear; i++){
+            cout<<queue->arr[i]<<" ";
+        }cout<<endl;
+    }
+}
+int main(){
+    Queue* queue = new Queue();
+    initQueue(queue);
+
+    queue = Enqueue(queue,23);
+    queue = Enqueue(queue,234);
+    queue = Enqueue(queue,235);
+    queue = Enqueue(queue,2356);
+    queue = Enqueue(queue,23567);
+    printQueue(queue);
+
+    queue = Dequeue(queue);
+    printQueue(queue);
+    queue = Dequeue(queue);
+    printQueue(queue);
+    queue = Dequeue(queue);
+    printQueue(queue);
+    queue = Dequeue(queue);
+    printQueue(queue);
+    queue = Dequeue(queue);
+    printQueue(queue);
+    queue = Dequeue(queue);
+    printQueue(queue);
+
+}
+
+
+// Priorit QUeue
+#include<iostream>
+using namespace std;
+struct Node {
+    int data;
+    int priority;
+    Node* next;
+};
+
+void enQueue(Node* head, int data, int priority){
+    Node* newNode = createNode(data, priority);
+    if(*head == nullptr || (*head) -> priority > priority){
+        newNode -> next = *head;
+        *head = newNode;
+    }else{
+        Node* current = *head;
+        while(temp -> next != nullptr && current -> next -> priority <= priority){
+            current = current -> next;
+        }
+        newNode -> next = current -> next;
+        current -> next = newNode;
+    }
+}
+
+void dequeue(Node* head){
+    if(*head == nullptr){
+        cout<<"Queue is empty"<<endl;
+
+    }else{
+        Node* temp = head;
+        head = head -> next;
+        delete(temp);
+    }
+}
+
+int isEmpty(Node* head){
+    return head == nullptr;
+}
+
+int isFull(Node* head){
+    return 
+    
+}
+
+// second one
+#include<iostream>
+using namespace std;
+#define MAX 100
+typedef struct{
+    int data[MAX];
+    int priority[MAX];
+    int size;
+} PriorityQueue;
+
+void initQueue(PriorityQueue* pq){
+    pq -> size = 0;
+}
+
+int isEmpty(PriorityQueue* pq){
+    return pq -> size == 0;
+}
+
+int isFull(PriorityQueue* pq){
+    return pq -> size == MAX;
+}
+
+void enQueue(PriorityQueue* pq, int value, int priority){
+    if(isFull(pq)){
+        cout << "Queue is full" <<endl;
+        return;
+    }
+    pq -> data[pq -> size] = value;
+    pq -> size++;
+}
+
+int getHighestPriorityIndex(PriorityQueue* pq){
+    int maxPriority = INT_MIN;
+    int index = -1;
+    
+    for(int i = 0; i < pq -> size; i++){
+        if(pq -> priority[i] > maxPriority){
+            maxPriority = pq -> priority[i];
+            index = i;
+        }
+    }
+    return index;
+}
+
+int dequeue(PriorityQueue* pq){
+    if(isEmpty(pq)){
+        cout<< "Priort queue is already empty"<<endl;
+        return -1;
+    }
+
+    int index = getHighestPriorityIndex(pq);
+    int value = pq -> data[index];
+
+    for(int i = index; i < pq -> size; i++){
+        pq -> data[i] = pq -> data[i + 1];
+        pq -> priority[i] = pq -> priority[i + 1];
+    }
+    pq -> size--;
+    return value;
+}
+
+void display(PriorityQueue* pq){
+    if(isEmpty(pq)){
+        cout<< "Queue is already empty"<<endl;
+        return;
+    }
+
+
+}
+
+int main(){
+    
+}
+
+// DEQUEUE
+#include<iostream>
+using namespace std;
+struct Node{
+    int data;
+    Node* next;
+};
+
+struct Dequeue{
+    Node* front;
+    Node* head;
+};
+
+Node* createNode(int value){
+    Node* newNode = new Node();
+    newNode -> data = value;
+    newNode -> next = nullptr;
+    // newNode -> head = nullptr;
+    // newNode -> front = nullptr;
+    return newNode;
+}
+
+
+Dequeue* createNodeDQ(){
+    Dequeue* newNode = new Dequeue();
+    newNode -> front = newNode -> head = nullptr;
+    return newNode;
+}
+
+Dequeue* insertAtBeg(Dequeue* node, int value){
+    Node* newNode = createNode(value);
+    if(node -> front == nullptr){
+        node -> front = node -> head = newNode;
+        return node;
+    }else{
+        newNode -> next = node -> front;
+        node -> front = newNode;
+        return node;
+    }
+}
+
+Dequeue* insertAtEnd(Dequeue* node, int value){
+    Node* newNode = createNode(value);
+    if(node -> front == nullptr){
+        node -> front = node -> head = newNode;
+    }else{
+        // Node* temp = node;
+        // while(temp -> next != nullptr){
+        //     temp = temp -> next;
+        // }
+        // temp -> head = newNode;
+        node -> head -> next = newNode;
+        node -> head = newNode;
+        
+    }
+    return node;
+}
+
+Dequeue* deleteAtBeg(Dequeue* node){
+    Node* temp = node -> front;
+    node -> front = node -> front -> next;
+    delete temp;
+    return node;
+}
+
+Dequeue* deleteFromEnd(Dequeue* node){
+    Node* temp = node -> front;
+    // while(temp -> next -> next != nullptr){
+    while(temp -> next != node -> head){
+        temp = temp -> next;
+    }
+    // Node* temp2 = temp -> next;
+    
+    delete node -> head;
+    node -> head = temp;
+    node -> head -> next = nullptr;
+    return node;
+}
+
+void display(Dequeue* node){
+    Node* temp = node -> front;
+    while(temp != nullptr){
+        cout<<temp-> data<<" ";
+        temp = temp -> next;
+    }cout<<endl;
+}
+
+int main(){
+    // Node* node = nullptr;
+    Dequeue* node = createNodeDQ();
+
+    Dequeue* first = insertAtBeg(node,213);
+    Dequeue* second = insertAtBeg(node,215);
+    Dequeue* third = insertAtBeg(node,218);
+    Dequeue* fourth = insertAtBeg(node,315);
+    Dequeue* fifth = insertAtBeg(node,418);
+    display(node);
+
+    Dequeue* first02 = insertAtEnd(node,2213);
+    Dequeue* second02 = insertAtEnd(node,3215);
+    Dequeue* third02 = insertAtEnd(node,4218);
+    Dequeue* fourth02 = insertAtEnd(node,5315);
+    Dequeue* fifth02 = insertAtEnd(node,6418);
+    display(node);
+
+
+    node = deleteAtBeg(node);
+    // node = deleteAtBeg(node);
+    display(node);
+
+    node = deleteFromEnd(node);
+    node = deleteFromEnd(node);
+    node = deleteFromEnd(node);
+    display(node);
+}

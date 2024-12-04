@@ -1,7 +1,7 @@
-// DFS stack
+// BFS QUEUE
 #include <iostream>
+#include <queue>
 #include <vector>
-#include <stack>
 
 #define MAX 100
 
@@ -26,27 +26,26 @@ void addEdge(int u, int v) {
     graph[v][u] = 1;
 }
 
-// Function to perform DFS using a stack
-void dfs(int start_vertex, int num_vertices) {
-    stack<int> s;
-    s.push(start_vertex);
+// Function to perform BFS
+void bfs(int start_vertex, int num_vertices) {
+    queue<int> q;
 
-    cout << "DFS traversal starting from vertex " << start_vertex << ":\n";
+    // Initialize the BFS starting point
+    visited[start_vertex] = true;
+    q.push(start_vertex);
 
-    while (!s.empty()) {
-        int current_vertex = s.top();
-        s.pop();
+    cout << "BFS traversal starting from vertex " << start_vertex << ":\n";
 
-        // If the current vertex is not visited
-        if (!visited[current_vertex]) {
-            visited[current_vertex] = true;
-            cout << current_vertex << " ";
+    while (!q.empty()) {
+        int current_vertex = q.front();
+        q.pop();
+        cout << current_vertex << " ";
 
-            // Push all adjacent vertices onto the stack (in reverse order for consistent traversal)
-            for (int i = num_vertices - 1; i >= 0; i--) {
-                if (graph[current_vertex][i] == 1 && !visited[i]) {
-                    s.push(i);
-                }
+        // Traverse all adjacent vertices
+        for (int i = 0; i < num_vertices; i++) {
+            if (graph[current_vertex][i] == 1 && !visited[i]) {
+                visited[i] = true;
+                q.push(i);
             }
         }
     }
@@ -56,6 +55,7 @@ void dfs(int start_vertex, int num_vertices) {
 int main() {
     int num_vertices = 5;
 
+    // Initialize the graph with 5 vertices
     initializeGraph(num_vertices);
 
     // Set edges based on the provided structure
@@ -65,8 +65,8 @@ int main() {
     addEdge(2, 3);
     addEdge(2, 4);
 
-    int start_vertex = 0; // Starting vertex for DFS
-    dfs(start_vertex, num_vertices);
+    int start_vertex = 0;  // Starting vertex for BFS
+    bfs(start_vertex, num_vertices);
 
     return 0;
 }
