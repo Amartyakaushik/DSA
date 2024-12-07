@@ -1,8 +1,7 @@
-
-    insertBST(root, 3);
-    insertBST(root, 21);
-    insertBST(root, 13);
-    insertBST(root, 32);
-    insertBST(root, 11);
-    insertBST(root, 21);
-    insertBST(root, 19);
+rt(34);
+    insert(44);
+    insert(54);
+    insert(24);
+    insert(38);
+    insert(14);
+    print();
